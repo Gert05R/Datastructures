@@ -89,7 +89,27 @@ public class BasicDocument extends Document
 		// expression for the syllable counting.  We recommend you implement 
 		// the helper function countSyllables in Document.java using a loop, 
 		// and then call it here on each word.
+		
+		
+		//Courses solution 1
+		/*List<String> tokens = getTokens("[aeiouyAEIOUY]+");
+		List<String> loneEs = getTokens("[^aeiouyAEIOUY]+[eE]\\b");
+		List<String> singleEs = getTokens("\\b[^aeiouyAEIOUY]*[eE]\\b");
+		
+		
+		return tokens.size() - (loneEs.size() - singleEs.size());*/
+		
+		//Courses solution 2
 		List<String> tokens = getTokens("[a-zA-Z]+");
+		int totalSyllables = 0;
+		for (String word : tokens)
+		{
+			totalSyllables += countSyllables(word);
+		}
+		return totalSyllables;
+		
+		//My Solution
+		/*List<String> tokens = getTokens("[a-zA-Z]+");
 		int counter = 0;
 		int current =0;
 		for (String word : tokens) 
@@ -117,7 +137,7 @@ public class BasicDocument extends Document
 			counter += current;
 			
 		}
-        return counter;
+        return counter;*/
 	}
 	
 	

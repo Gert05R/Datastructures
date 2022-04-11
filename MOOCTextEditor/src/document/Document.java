@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.*;
 
 public abstract class Document {
 
@@ -70,13 +71,35 @@ public abstract class Document {
 	    // getNumSyllables method in BasicDocument (module 2) and 
 	    // EfficientDocument (module 3).
 		
-		BasicDocument bd = new BasicDocument(word);
+		//My solution
+		/*BasicDocument bd = new BasicDocument(word);
 		List<String> tokens= bd.getTokens("[aoeiuyAOEIUY]+");
-		//tokens.remove(null);
-		
 		int max = tokens.size();
-		System.out.println(tokens);
-	    return max;
+		//System.out.println(tokens);
+	    return max;*/
+		
+		// Courses solution
+		System.out.print("Counting syllables in " + word + "...");
+		int numSyllables = 0;
+		boolean newSyllable = true;
+		String vowels = "aeiouy";
+		char[] cArray = word.toCharArray();
+		for (int i = 0; i < cArray.length; i++)
+		{
+		    if (i == cArray.length-1 && Character.toLowerCase(cArray[i]) == 'e' 
+		    		&& newSyllable && numSyllables > 0) {
+                numSyllables--;
+            }
+		    if (newSyllable && vowels.indexOf(Character.toLowerCase(cArray[i])) >= 0) {
+				newSyllable = false;
+				numSyllables++;
+			}
+			else if (vowels.indexOf(Character.toLowerCase(cArray[i])) < 0) {
+				newSyllable = true;
+			}
+		}
+		//System.out.println( "found " + numSyllables);
+		return numSyllables;
 	}
 	
 	/** A method for testing
@@ -122,13 +145,24 @@ public abstract class Document {
 	
 	
 	/** Return the number of words in this document */
-	public abstract int getNumWords();
+	public int getNumWords()
+	{
+		return this.getNumWords();
+	}
+	
 	
 	/** Return the number of sentences in this document */
-	public abstract int getNumSentences();
+	public int getNumSentences()
+	{
+		return this.getNumSentences();
+	}
+	
 	
 	/** Return the number of syllables in this document */
-	public abstract int getNumSyllables();
+	public int getNumSyllables()
+	{
+		return this.getNumSyllables();
+	}
 	
 	/** Return the entire text of this document */
 	public String getText()
@@ -141,7 +175,17 @@ public abstract class Document {
 	{
 	    // TODO: You will play with this method in week 1, and 
 		// then implement it in week 2
-	    return text.length();
+		double words = getNumWords();
+		double sentences = getNumSentences();
+		double syllables = getNumSyllables();
+		double partOne = 1.015*(words/sentences);
+		double partTwo = 84.6 * (syllables/words);
+		double constant = 206.835;
+		
+		
+		double result = constant - partOne - partTwo; 
+		
+	    return result;
 	}
 	
 	
