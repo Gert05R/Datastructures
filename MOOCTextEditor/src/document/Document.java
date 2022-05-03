@@ -1,6 +1,6 @@
 package document;
 
-import static org.junit.Assert.assertArrayEquals;
+//import static org.junit.Assert.assertArrayEquals;
 
 /** 
  * A class that represents a text document
@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.*;
 
 public abstract class Document {
 

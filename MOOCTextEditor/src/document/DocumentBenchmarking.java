@@ -15,9 +15,10 @@ public class DocumentBenchmarking {
 	
 	public static void main(String [] args) {
 
+		
 	    // Run each test more than once to get bigger numbers and less noise.
 	    // You can try playing around with this number.
-	    int trials = 100;
+	    int trials = 1;
 
 	    // The text to test on
 	    String textfile = "data/warAndPeace.txt";
@@ -37,6 +38,7 @@ public class DocumentBenchmarking {
 		// TODO: Fill in the rest of this method so that it runs two loops
 		// and prints out timing results as described in the assignment 
 		// instructions and following the pseudocode below.
+		System.out.println("NumberOfChars" + "\t" + "BasicTime" + "\t" + "EfficientTime" + "\n");
 		for (int numToCheck = start; numToCheck < numSteps*increment + start; 
 				numToCheck += increment)
 		{
@@ -58,7 +60,29 @@ public class DocumentBenchmarking {
 			 * 6. Print out the time it took to complete the loop in step 5 
 			 *      (on the same line as the first print statement) followed by a newline (\n) 
 			 */  
-			 
+			
+			System.out.print(numToCheck+"\t\t");
+			String input = getStringFromFile(textfile, numToCheck);
+			
+			long startTime = System.nanoTime();
+			for (int i =0; i < trials;  i++) 
+			{
+				BasicDocument bd = new BasicDocument(input);
+				double fleschScore = bd.getFleschScore();
+			}
+			long endTime = System.nanoTime();
+			double estTime1 = (endTime- startTime) /100000000.0;
+			System.out.print(estTime1 + "\t");
+			
+			long startTime2 = System.nanoTime();
+			for (int i =0; i< trials; i++) 
+			{
+				EfficientDocument ed = new EfficientDocument(input);
+				double fleschScore2 = ed.getFleschScore();
+			}
+			long endTime2 = System.nanoTime();
+			double estTime2 = (endTime2 - startTime2) /100000000.0;
+			System.out.print(estTime2 + "\n");
 		}
 	
 	}
