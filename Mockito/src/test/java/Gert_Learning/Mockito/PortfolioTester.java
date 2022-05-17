@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+// https://www.youtube.com/watch?v=2X21g340azs
+
 public class PortfolioTester {
 	
 	Portfolio portfolio;
@@ -48,7 +50,7 @@ public class PortfolioTester {
 		when(stockService.getPrice(microsoftStock)).thenReturn(1000.00);
 		
 		double marketValue = portfolio.getMarketValue();
-		return marketValue == 10050.0;
+		return marketValue == 100500.0;
 	}
 	
 	
