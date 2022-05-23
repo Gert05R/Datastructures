@@ -3,6 +3,7 @@ package spelling;
 import java.util.List;
 import java.util.Set;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -40,8 +41,30 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean addWord(String word)
 	{
 	    //TODO: Implement this method.
-	    return false;
+	
+		TrieNode node = root;
+
+		for (Character c : word.toLowerCase().toCharArray()) {
+			TrieNode child = node.getChild(c);
+
+			if (child != null) {
+				node = child;
+			} else {
+				node = node.insert(c);
+			}
+		}
+
+		if (node.endsWord()) {
+			return false;
+		}
+
+		node.setEndsWord(true);
+		++size;
+
+		return true;
+
 	}
+	
 	
 	/** 
 	 * Return the number of words in the dictionary.  This is NOT necessarily the same
@@ -50,7 +73,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public int size()
 	{
 	    //TODO: Implement this method
-	    return 0;
+		return this.size;
 	}
 	
 	
@@ -60,7 +83,18 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
-		return false;
+		TrieNode node = root;
+
+		for (Character c : s.toLowerCase().toCharArray()) {
+			TrieNode child = node.getChild(c);
+			if (child != null) {
+				node = child;
+			} else {
+				return false;
+			}
+		}
+
+		return node.endsWord();
 	}
 
 	/** 
@@ -100,8 +134,41 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
+    	 TrieNode node = root;
+    	 LinkedList <TrieNode> Quee = new LinkedList <TrieNode>();
+    	 LinkedList <String> Visited = new LinkedList <String>();
     	 
-         return null;
+    	 TrieNode child = null;
+    	 for (Character ch : prefix.toLowerCase().toCharArray()) 
+    	 {
+    		 child = node.getChild(ch);
+    		 if (child != null) 
+    		 {
+    			node = child; 
+    		 }
+    		 else {
+    			 return Collections.<String> emptyList();
+    		 }
+    		 
+    	 }
+    	 
+    	 Quee.addLast(node);
+    	 
+ 		while (!Quee.isEmpty() && numCompletions > 0) {
+			TrieNode t = Quee.poll();
+
+			if (t.endsWord()) {
+				Visited.add(t.getText());
+				--numCompletions;
+			}
+
+			for (Character c : t.getValidNextCharacters()) {
+				Quee.offer(t.getChild(c));
+			}
+
+		}
+
+		return Visited;
      }
 
  	// For debugging
@@ -124,6 +191,10 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
  			printNode(next);
  		}
  	}
+ 	
+ 	
+ 	
+ 	
  	
 
 	
