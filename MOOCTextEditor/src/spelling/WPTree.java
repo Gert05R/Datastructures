@@ -26,10 +26,9 @@ public class WPTree implements WordPath {
 	// You'll need to create your own NearbyWords object here.
 	public WPTree () {
 		this.root = null;
-		// TODO initialize a NearbyWords object
-		// Dictionary d = new DictionaryHashSet();
-		// DictionaryLoader.loadDictionary(d, "data/dict.txt");
-		// this.nw = new NearbyWords(d);
+		Dictionary d = new DictionaryHashSet();
+		DictionaryLoader.loadDictionary(d, "data/dict.txt");
+		this.nw = new NearbyWords(d);
 	}
 	
 	//This constructor will be used by the grader code
@@ -41,8 +40,40 @@ public class WPTree implements WordPath {
 	// see method description in WordPath interface
 	public List<String> findPath(String word1, String word2) 
 	{
-	    // TODO: Implement this method.
-	    return new LinkedList<String>();
+	    	List<String> retList = new LinkedList<String>();
+	    	List<WPTreeNode> queue = new LinkedList<WPTreeNode>(); 
+	    	HashSet<String> visited = new HashSet<String>();
+	    	
+	    	WPTreeNode curr = new WPTreeNode(word1, this.root);
+	    	visited.add(word1);
+	    	queue.add(curr);
+	    	
+	    	while (!queue.isEmpty() && !visited.contains(word2)) 
+	    	{
+	    		curr = queue.get(0);
+	    		queue.remove(0);
+	    		List<String>neighbours = nw.distanceOne(curr.getWord(), true);
+	    		for (int i=0; i<neighbours.size(); i++ ) 
+	    		{
+	    			if (!visited.contains(neighbours.get(i)))
+	    			{
+	    				WPTreeNode newNode = curr.addChild(neighbours.get(i));
+	    				visited.add(neighbours.get(i));
+	    				queue.add(newNode);
+	    				if ((neighbours.get(i)).equals(word2)) 
+						{
+	    					return retList = newNode.buildPathToRoot();
+						} 
+	    				
+	    			}
+	    		}
+	    		
+	    	}
+	    	
+	    	
+	    	
+	    	return null;
+	   
 	}
 	
 	// Method to print a list of WPTreeNodes (useful for debugging)
@@ -141,6 +172,18 @@ class WPTreeNode {
         }
         ret+=(" ]\n");
         return ret;
+    }
+    
+    public static void main(String[] args) {
+ 	   //basic testing code to get started
+ 	   String word1 = "spell";
+ 	   String word2 = "mine";
+ 	   WPTree wp = new WPTree();
+ 	   List<String> founded = wp.findPath(word1,word2);
+ 	   System.out.println("to go from word \""+word1+"to word \""+word2);
+ 	   System.out.println(founded.toString()+"\n");
+ 	   
+ 	   
     }
 
 }
